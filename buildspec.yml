@@ -13,9 +13,8 @@ phases:
       - |
         if [[ "$CODEBUILD_INITIATOR" == *"codepipeline"* ]]; then
           PIPELINE_NAME=$(echo $CODEBUILD_INITIATOR | cut -d/ -f2)
-        fi
-      - |  
-      - echo "Pipeline name: $PIPELINE_NAME"
+        fi 
+      #- echo "Pipeline name: $PIPELINE_NAME"
       - echo docker version
       - docker -v
       - aws s3 cp s3://eon-deploy-files-dev/devops/trivy/setup_trivy.sh .
