@@ -30,7 +30,7 @@ phases:
       - docker tag $(docker images --filter=reference=$REPOSITORY_URI:latest --format "{{.ID}}") $REPOSITORY_URI:$IMAGE_TAG
   post_build:
     commands:
-      - ./trivy_scan.sh $REPOSITORY_URI $IMAGE_TAG $CODEBUILD_INITIATOR
+      - ./trivy_scan1.sh $REPOSITORY_URI $IMAGE_TAG $CODEBUILD_INITIATOR
 #      - aws sns publish --topic-arn $TOPIC_ARN --message "Trivy scan results :"
       - echo Build completed on `date`
       - echo Pushing the Docker images...
