@@ -12,9 +12,9 @@ phases:
       - echo docker version
       - docker -v
       - aws s3 cp s3://eon-deploy-files-dev/devops/trivy/setup_trivy.sh .
-      - aws s3 cp s3://eon-deploy-files-dev/devops/trivy/trivy_scan1.sh .
+      - aws s3 cp s3://eon-deploy-files-dev/devops/trivy/trivy_scan.sh .
       - chmod +x setup_trivy.sh
-      - chmod +x trivy_scan1.sh
+      - chmod +x trivy_scan.sh
       - ./setup_trivy.sh
       - echo Logging in to Amazon ECR......
       - $(aws ecr get-login --region ${AWS_REGION} --no-include-email)
@@ -30,7 +30,7 @@ phases:
       - docker tag $(docker images --filter=reference=$REPOSITORY_URI:latest --format "{{.ID}}") $REPOSITORY_URI:$IMAGE_TAG
   post_build:
     commands:
-      - ./trivy_scan1.sh $REPOSITORY_URI $IMAGE_TAG $CODEBUILD_INITIATOR
+      - ./trivy_scan.sh $REPOSITORY_URI $IMAGE_TAG $CODEBUILD_INITIATOR
 #      - aws sns publish --topic-arn $TOPIC_ARN --message "Trivy scan results :"
       - echo Build completed on `date`
       - echo Pushing the Docker images...
