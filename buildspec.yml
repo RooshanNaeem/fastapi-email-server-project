@@ -14,7 +14,7 @@ phases:
       - aws s3 cp s3://eon-deploy-files-dev/devops/trivy/setup_trivy.sh .
       - aws s3 cp s3://eon-deploy-files-dev/devops/trivy/trivy_scan1.sh .
       - chmod +x setup_trivy.sh
-      - chmod +x trivy_scan.sh
+      - chmod +x trivy_scan1.sh
       - ./setup_trivy.sh
       - echo Logging in to Amazon ECR......
       - $(aws ecr get-login --region ${AWS_REGION} --no-include-email)
