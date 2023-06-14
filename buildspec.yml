@@ -9,6 +9,13 @@ phases:
       docker: 19
   pre_build:
     commands:
+      - PIPELINE_NAME=""
+      - |
+        if [[ "$CODEBUILD_INITIATOR" == *"codepipeline"* ]]; then
+          PIPELINE_NAME=$(echo $CODEBUILD_INITIATOR | cut -d/ -f2)
+        fi
+      - |  
+      - echo "Pipeline name: $PIPELINE_NAME"
       - echo docker version
       - docker -v
       - aws s3 cp s3://eon-deploy-files-dev/devops/trivy/setup_trivy.sh .
@@ -30,7 +37,7 @@ phases:
       - docker tag $(docker images --filter=reference=$REPOSITORY_URI:latest --format "{{.ID}}") $REPOSITORY_URI:$IMAGE_TAG
   post_build:
     commands:
-      - ./trivy_scan.sh $REPOSITORY_URI $IMAGE_TAG $CODEPIPELINE_PIPELINE_NAME
+      - ./trivy_scan.sh $REPOSITORY_URI $IMAGE_TAG $PIPELINE_NAME
 #      - aws sns publish --topic-arn $TOPIC_ARN --message "Trivy scan results :"
       - echo Build completed on `date`
       - echo Pushing the Docker images...
